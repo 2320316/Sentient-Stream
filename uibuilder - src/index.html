@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentient Stream</title>
+    <link rel="stylesheet" href="./index.css" />
+    <script defer src="./index.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <p class="eyebrow">Sentient Stream</p>
+          <h1 id="headline">Listening for a mood shift</h1>
+        </div>
+        <div class="topbar-actions">
+          <button id="spotify-login" class="button secondary" type="button">
+            <i data-lucide="plug-zap" aria-hidden="true"></i>
+            <span>Connect Spotify</span>
+          </button>
+          <button id="activate-player" class="button primary" type="button">
+            <i data-lucide="radio" aria-hidden="true"></i>
+            <span>Activate Player</span>
+          </button>
+          <span id="socket-state" class="status-pill">Socket idle</span>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section
+          class="panel camera-panel"
+          aria-label="Live camera mood detection"
+        >
+          <div
+            id="camera-frame"
+            class="camera-frame"
+            style="--mood-color: #95a5a6"
+          >
+            <video id="camera-feed" autoplay muted playsinline></video>
+            <div id="camera-message" class="camera-message">Camera pending</div>
+          </div>
+
+          <div class="mood-summary">
+            <div>
+              <p class="eyebrow">Detected mood</p>
+              <p id="mood-label" class="mood-label">Neutral</p>
+              <p id="mood-analysis" class="mood-analysis">
+                Waiting for an LLM mood analysis
+              </p>
+            </div>
+            <div class="confidence-block">
+              <span id="confidence-label">0%</span>
+              <div class="meter" aria-hidden="true">
+                <span id="confidence-bar"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="scan-row">
+            <span id="detector-state" class="muted">Starting detector</span>
+            <button
+              id="toggle-detection"
+              class="button secondary compact"
+              type="button"
+            >
+              <i data-lucide="pause" aria-hidden="true"></i>
+              <span>Pause</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel player-panel" aria-label="Spotify player">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Spotify player</p>
+              <h2 id="track-name">No active track</h2>
+            </div>
+            <span id="player-state" class="status-pill">Disconnected</span>
+          </div>
+
+          <div class="now-playing">
+            <div id="album-art" class="album-art" aria-hidden="true"></div>
+            <div class="track-copy">
+              <p id="artist-name">Connect Spotify to begin</p>
+              <div class="time-row">
+                <span id="progress-now">0:00</span>
+                <span id="progress-end">0:00</span>
+              </div>
+              <div class="meter player-meter" aria-hidden="true">
+                <span id="progress-bar"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls" aria-label="Playback controls">
+            <button
+              id="previous-track"
+              class="icon-button"
+              type="button"
+              aria-label="Previous track"
+              title="Previous track"
+            >
+              <i data-lucide="skip-back" aria-hidden="true"></i>
+            </button>
+            <button
+              id="toggle-playback"
+              class="icon-button primary-control"
+              type="button"
+              aria-label="Play or pause"
+              title="Play or pause"
+            >
+              <i data-lucide="play" aria-hidden="true"></i>
+            </button>
+            <button
+              id="next-track"
+              class="icon-button"
+              type="button"
+              aria-label="Next track"
+              title="Next track"
+            >
+              <i data-lucide="skip-forward" aria-hidden="true"></i>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel queue-panel" aria-label="AI mood queue">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">AI mood queue</p>
+              <h2>Recent matches</h2>
+            </div>
+            <span id="queue-state" class="status-pill">Idle</span>
+          </div>
+          <div id="queue-list" class="queue-list" aria-live="polite">
+            <p class="empty-state">Waiting for a mood shift</p>
+          </div>
+        </section>
+
+        <section class="panel manual-panel" aria-label="Manual song search">
+          <div class="section-heading tight">
+            <div>
+              <p class="eyebrow">Manual song</p>
+              <h2>Search & add</h2>
+            </div>
+          </div>
+          <form id="manual-song-form" class="manual-song-form">
+            <label class="manual-song-field" for="manual-song-title">
+              <span>Song title</span>
+              <input
+                id="manual-song-title"
+                name="manual-song-title"
+                type="text"
+                placeholder="Enter a title"
+                autocomplete="off"
+                required
+              />
+            </label>
+            <label class="manual-song-field" for="manual-song-artist">
+              <span>Artist</span>
+              <input
+                id="manual-song-artist"
+                name="manual-song-artist"
+                type="text"
+                placeholder="Optional artist"
+                autocomplete="off"
+              />
+            </label>
+            <button
+              id="manual-song-submit"
+              type="submit"
+              class="button primary manual-song-submit"
+            >
+              Search & add
+            </button>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
