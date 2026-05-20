@@ -37,6 +37,7 @@
     confidenceBar: document.getElementById("confidence-bar"),
     detectorState: document.getElementById("detector-state"),
     toggleDetection: document.getElementById("toggle-detection"),
+    analyzeNow: document.getElementById("analyze-now"),
     trackName: document.getElementById("track-name"),
     artistName: document.getElementById("artist-name"),
     albumArt: document.getElementById("album-art"),
@@ -878,6 +879,17 @@
         state.detectionPaused ? "play" : "pause",
       );
       setStatus(state.detectionPaused ? "Detection paused" : "Detection live");
+    });
+
+    dom.analyzeNow.addEventListener("click", () => {
+      if (state.cameraReady && state.detectorReady) {
+        scanMood();
+      } else {
+        const issues = [];
+        if (!state.cameraReady) issues.push("camera not ready");
+        if (!state.detectorReady) issues.push("LM Studio offline");
+        setStatus(`Cannot analyze: ${issues.join(", ")}`);
+      }
     });
 
     dom.previousTrack.addEventListener("click", () => {
